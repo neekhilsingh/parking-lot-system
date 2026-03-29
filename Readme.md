@@ -68,7 +68,7 @@ parking-lot-system/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/parking-lot-system.git
+git clone https://github.com/neekhilsingh/parking-lot-system.git
 ```
 
 2. Move into the project directory:
