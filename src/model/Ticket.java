@@ -4,12 +4,14 @@ public class Ticket {
 
     private int ticketId;
     private String vehicleNumber;
+    private int slotId;
     private long entryTime;
     private long exitTime;
 
-    public Ticket(int ticketId, String vehicleNumber, long entryTime) {
+    public Ticket(int ticketId, String vehicleNumber, int slotId, long entryTime) {
         this.ticketId = ticketId;
         this.vehicleNumber = vehicleNumber;
+        this.slotId = slotId;
         this.entryTime = entryTime;
         this.exitTime = 0;
     }
@@ -20,6 +22,10 @@ public class Ticket {
 
     public String getVehicleNumber() {
         return vehicleNumber;
+    }
+
+    public int getSlotId() {
+        return slotId;
     }
 
     public long getEntryTime() {

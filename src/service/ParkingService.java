@@ -30,7 +30,7 @@ public class ParkingService {
 
                 slot.setOccupied(true);
 
-                Ticket ticket = new Ticket(ticketCounter++, vehicle.getVehicleNumber(), System.currentTimeMillis());
+                Ticket ticket = new Ticket(ticketCounter++, vehicle.getVehicleNumber(), slot.getSlotId(), System.currentTimeMillis());
 
                 parkingDAO.saveTicket(ticket);
 
@@ -56,7 +56,7 @@ public class ParkingService {
         ticket.setExitTime(System.currentTimeMillis());
 
         for (ParkingSlot slot : parkingLot.getParkingSlots()) {
-            if (slot.isOccupied()) {
+            if (slot.getSlotId() == ticket.getSlotId()) {
                 slot.setOccupied(false);
                 break;
             }
