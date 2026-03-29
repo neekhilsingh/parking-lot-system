@@ -1,39 +1,62 @@
 # Parking Lot Management System
 
-A Java console app that handles the basic flow of a parking lot — vehicles in, slot assigned, ticket out, bill on exit. Made this as a BYOP submission for Programming in Java at VIT Bhopal University.
+A Java console application that simulates how vehicles move through a parking lot — entry, slot allocation, ticket generation, and billing on exit.
+
+Built as a BYOP (Bring Your Own Project) submission for the Programming in Java course at VIT Bhopal University.
 
 ---
 
-## Why I built it this way
+## Why this approach
 
-The parking lot problem shows up in every DSA list and most people solve it as a flat script — one class, a bunch of if-else, done. I wanted to see what it looks like when you actually separate concerns properly. So there is a model layer, a service layer, and a DAO layer, each doing its own thing. It made the code longer but also made it obvious where to go when something needed changing.
+The parking lot problem appears in almost every DSA list, and most implementations treat it as a quick script — one class, many conditionals, and done.
 
-The other thing I cared about was making the data layer swappable. Right now everything sits in ArrayLists. But the DAO is isolated enough that adding real DB support later means touching one file, not rewriting half the project. The schema is already written too, so that work is mostly done.
+This project takes a more structured approach by separating responsibilities into different layers:
+
+* **Model layer** → represents data
+* **Service layer** → handles business logic
+* **DAO layer** → manages data access
+
+This makes the code easier to understand, maintain, and extend.
+
+Another key focus was flexibility in the data layer. Currently, data is stored using `ArrayList`, but the DAO layer is isolated enough to allow easy integration of a real database later. The database schema is already included, so most of that setup is prepared.
 
 ---
 
-## What it actually does
+## What the system does
 
-A vehicle comes in. The system checks what type it is (Car, Bike, or Truck), finds a free slot that fits, and hands back a ticket with the entry time on it. When the same vehicle leaves, the system pulls up the ticket, figures out how long it was parked, calculates the charge, and opens up the slot again.
+### When a vehicle enters:
 
-Nothing fancy, but the full loop works.
+* The system identifies its type (Car, Bike, or Truck)
+* A suitable available slot is assigned
+* A ticket is generated with the entry time
+
+### When the vehicle exits:
+
+* The ticket is retrieved
+* Parking duration is calculated
+* Charges are computed based on time
+* The slot is freed for future use
 
 ---
 
 ## Features
 
-- Car, Bike, Truck support with separate slot logic
-- Slot allocated on entry, freed on exit
-- Ticket generated per vehicle with entry timestamp
-- Bill calculated at exit based on actual duration
-- In-memory storage using ArrayList (DAO layer ready for DB swap)
-- Clean package structure: model → service → dao → util
+* Supports Car, Bike, and Truck with separate slot handling
+* Automatic slot allocation on entry and release on exit
+* Ticket generation with entry timestamp
+* Billing based on actual parking duration
+* In-memory storage using `ArrayList`
+* DAO layer designed for easy database integration
+* Clean package structure: `model → service → dao → util`
 
 ---
 
 ## Requirements
 
-Java 8 or above. That is it, no external libraries needed.
+* Java 8 or above
+* No external dependencies required
+
+Check your Java version:
 
 ```bash
 java -version
@@ -41,16 +64,22 @@ java -version
 
 ---
 
-## Running it
+## Running the project
+
+### Clone the repository:
 
 ```bash
 git clone https://github.com/neekhilsingh/parking-lot-system.git
 cd parking-lot-system
 ```
 
+### Compile:
+
 ```bash
 javac -d . src/main/Main.java
 ```
+
+### Run:
 
 ```bash
 java main.Main
@@ -58,54 +87,61 @@ java main.Main
 
 ---
 
-## Folder layout
+## Project structure
 
-```
+```plaintext
 parking-lot-system/
 │
 ├── src/
-│   ├── main/
-│   │   └── Main.java                 starts everything
-│   ├── model/
-│   │   ├── Vehicle.java              vehicle type + registration
-│   │   ├── ParkingSlot.java          slot state and occupancy
-│   │   ├── Ticket.java               links vehicle to slot, holds entry time
-│   │   └── ParkingLot.java           manages the full slot collection
-│   ├── service/
-│   │   ├── ParkingService.java       handles park and exit end to end
-│   │   └── BillingService.java       takes a ticket, returns the charge
-│   ├── dao/
-│   │   └── ParkingDAO.java           reads and writes to storage
-│   └── util/
-│       └── DBConnection.java         db setup for when that gets added
+│  ├── main/
+│  │  └── Main.java              entry point of the application
+│  ├── model/
+│  │  ├── Vehicle.java           vehicle type and registration
+│  │  ├── ParkingSlot.java       slot state and occupancy
+│  │  ├── Ticket.java            links vehicle, slot, and entry time
+│  │  └── ParkingLot.java        manages all parking slots
+│  ├── service/
+│  │  ├── ParkingService.java    handles entry and exit operations
+│  │  └── BillingService.java    calculates parking charges
+│  ├── dao/
+│  │  └── ParkingDAO.java        handles data storage
+│  └── util/
+│    └── DBConnection.java       placeholder for database setup
 │
 ├── database/
-│   └── schema.sql
+│  └── schema.sql
 ├── README.md
 └── .gitignore
 ```
 
 ---
 
-## How the pieces connect
+## How the pieces work together
 
-`Main` sets up the lot and kicks off the flow. `ParkingService` is the one doing the actual work — it calls into the model classes to check slot availability, creates the ticket, and calls `BillingService` on exit to get the charge. `ParkingDAO` handles anything that touches storage so the service layer never knows if it is talking to an ArrayList or a database.
+* `Main` initializes the system and starts execution
+* `ParkingService` handles parking and exit operations
+* `BillingService` calculates the parking charges
+* `ParkingDAO` manages data storage and retrieval
+
+This separation ensures that the service layer does not depend on how data is stored internally.
 
 ---
 
-## Things left to do
+## Future improvements
 
-- Wire up the actual JDBC connection, the stub and schema are already there
-- Slot tracking is a bit loose right now — it does not pin down exact slot IDs reliably
-- No concurrency support yet, two vehicles entering at the same time would be a problem
-- A simple menu interface would make it easier to use without reading the code
+* Integrate a real JDBC database connection
+* Improve slot tracking accuracy
+* Add concurrency support for handling multiple vehicles
+* Implement a menu-driven interface for better usability
 
 ---
 
 ## Course details
 
-**Course:** Programming in Java  
-**Submission type:** BYOP (Bring Your Own Project)  
-**Name:** Neekhil Kumar Singh  
-**Registration No:** 24BAI10907  
-**Institution:** VIT Bhopal University
+* Course: Programming in Java
+* Submission Type: BYOP (Bring Your Own Project)
+* Name: Neekhil Kumar Singh
+* Registration No: 24BAI10907
+* Institution: VIT Bhopal University
+
+---
