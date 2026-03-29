@@ -125,7 +125,7 @@ Basic exception handling is included in the database connection class.
 ## Author
 
 Neekhil Kumar Singh
-B.Tech (Computer Science)
+24BAI10907
 
 ---
 
