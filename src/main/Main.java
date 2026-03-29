@@ -1,8 +1,8 @@
 package main;
 
-import model.Vehicle;
-import model.ParkingSlot;
-import model.ParkingLot;
+import model.*;
+import service.*;
+import dao.ParkingDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +11,29 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Create parking slots
         List<ParkingSlot> slots = new ArrayList<>();
         slots.add(new ParkingSlot(1, "CAR"));
         slots.add(new ParkingSlot(2, "BIKE"));
         slots.add(new ParkingSlot(3, "TRUCK"));
 
-        // Create parking lot
         ParkingLot parkingLot = new ParkingLot(slots);
 
-        // Create a vehicle
-        Vehicle vehicle = new Vehicle("MP04AB1234", "CAR");
+        ParkingDAO dao = new ParkingDAO();
 
-        // Print basic info
-        System.out.println("Parking Lot Created with Slots: " + parkingLot.getParkingSlots().size());
-        System.out.println("Vehicle Number: " + vehicle.getVehicleNumber());
-        System.out.println("Vehicle Type: " + vehicle.getVehicleType());
+        ParkingService service = new ParkingService(parkingLot, dao);
+        BillingService billingService = new BillingService();
+
+        Vehicle v1 = new Vehicle("MP04AB1234", "CAR");
+
+        service.parkVehicle(v1);
+
+        service.removeVehicle("MP04AB1234");
+
+        Ticket ticket = dao.getTicketByVehicleNumber("MP04AB1234");
+
+        if (ticket != null) {
+            double bill = billingService.calculateBill(ticket);
+            System.out.println("Total Bill: ₹" + bill);
+        }
     }
 }

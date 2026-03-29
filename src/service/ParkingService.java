@@ -11,14 +11,17 @@ public class ParkingService {
     private ParkingDAO parkingDAO;
     private int ticketCounter = 1;
 
-    // Constructor
-    public ParkingService(ParkingLot parkingLot) {
+    public ParkingService(ParkingLot parkingLot, ParkingDAO parkingDAO) {
         this.parkingLot = parkingLot;
-        this.parkingDAO = new ParkingDAO();
+        this.parkingDAO = parkingDAO;
     }
 
-    // Park Vehicle
     public void parkVehicle(Vehicle vehicle) {
+
+        if (vehicle == null) {
+            System.out.println("Invalid vehicle");
+            return;
+        }
 
         List<ParkingSlot> slots = parkingLot.getParkingSlots();
 
@@ -38,10 +41,9 @@ public class ParkingService {
             }
         }
 
-        System.out.println("No available slot for this vehicle type");
+        System.out.println("No available slot");
     }
 
-    // Remove Vehicle
     public void removeVehicle(String vehicleNumber) {
 
         Ticket ticket = parkingDAO.getTicketByVehicleNumber(vehicleNumber);
@@ -53,7 +55,6 @@ public class ParkingService {
 
         ticket.setExitTime(System.currentTimeMillis());
 
-        // Free the slot
         for (ParkingSlot slot : parkingLot.getParkingSlots()) {
             if (slot.isOccupied()) {
                 slot.setOccupied(false);
@@ -61,6 +62,6 @@ public class ParkingService {
             }
         }
 
-        System.out.println("Vehicle Removed. Ticket ID: " + ticket.getTicketId());
+        System.out.println("Vehicle Removed");
     }
 }
